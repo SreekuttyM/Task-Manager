@@ -8,6 +8,6 @@
 import Foundation
 
 enum TImage: String {
-    case AppLogo = "AppLogo"
+    case appLogo = "TLogo"
 
 }
