@@ -8,20 +8,23 @@
 import SwiftUI
 
 struct TAppView: View {
-    @State var showHome: Bool = false
+    @StateObject var appState: TAppState = TAppState()
     var body: some View {
-        AppViewBuilder(showHome: showHome) {
-            Text("Home Screen")
-        } onBoardingView: {
-            OnboardingView()
-        }
+        AppViewBuilder(
+            showHome: appState.showHome,
+            homeView: {
+                Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            }, onBoardingView: {
+                OnboardingView()
+            }
+        ).environmentObject(appState)
     }
 }
 
 #Preview {
-    TAppView(showHome: true)
+    TAppView(appState: TAppState(showHome: true))
 }
 
 #Preview {
-    TAppView(showHome: false)
+    TAppView(appState: TAppState(showHome: false))
 }

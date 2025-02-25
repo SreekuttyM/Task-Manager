@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AppViewBuilder<HomeView: View, OnboardingView: View>: View {
-    var showHome: Bool = false
+    var showHome: Bool
     @ViewBuilder var homeView: HomeView
     @ViewBuilder var onBoardingView: OnboardingView
 
@@ -24,7 +24,7 @@ struct AppViewBuilder<HomeView: View, OnboardingView: View>: View {
 }
 
 #Preview {
-    AppViewBuilder(homeView: {
+    AppViewBuilder(showHome: true, homeView: {
         Text("Home Screen")
     }, onBoardingView: {
         OnboardingView()

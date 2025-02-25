@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    @EnvironmentObject var root: TAppState
     var body: some View {
         ZStack {
             GradientBackgroundView(colors: [TColor.accent, TColor.accent, TColor.secondary])
@@ -41,6 +42,7 @@ struct OnboardingView: View {
     private var bottomButton: some View {
         Button {
             // action
+            root.updateViewState(showHome: true)
         } label: {
             Text("GET STARTED >>").navigationActionModifier()
         }
