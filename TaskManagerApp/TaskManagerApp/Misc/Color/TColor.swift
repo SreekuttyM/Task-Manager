@@ -10,4 +10,6 @@ import SwiftUI
 struct TColor {
     static let accent = Color.accentColor
     static let primary = Color.tPrimary
+    static let secondary = Color.tSecondary
+
 }
