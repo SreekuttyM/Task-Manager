@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            Image(systemName: "globe")
+            Image(TImage.appLogo.rawValue)
                 .imageScale(.large)
                 .foregroundStyle(.tint)
             Text("Hello, world!").font(.custom("Poppins-Bold", fixedSize: 12))
