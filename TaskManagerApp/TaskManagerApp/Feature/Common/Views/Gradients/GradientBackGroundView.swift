@@ -9,6 +9,9 @@ import SwiftUI
 
 struct GradientBackgroundView: View {
     var colors: [Color]
+    init(colors: [Color] = [TColor.accent, TColor.primary, TColor.primary, TColor.primary]) {
+        self.colors = colors
+    }
     var body: some View {
         ZStack {
             LinearGradient(
