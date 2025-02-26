@@ -10,7 +10,7 @@ import SwiftUI
 protocol ThemeProtocol {
     var largeTitleFont: Font { get }
     var textTitleFont: Font { get }
-    var normalBtnTitleFont: Font { get }
+    var subTextFont: Font { get }
 
     var accentColor: Color { get }
     var primaryThemeColor: Color { get }
@@ -18,9 +18,20 @@ protocol ThemeProtocol {
 }
 
 class ThemeManager: ObservableObject {
-    @Published var selectedTheme: ThemeProtocol = MainTheme()
+    @Published var selectedTheme: ThemeProtocol = MainTheme(folder: ThemeName.main.rawValue)
 
-    func setTheme(_ theme: ThemeProtocol) {
-        selectedTheme = theme
+    init() {
+        loadTheme()
     }
+
+    func setTheme(_ themeName: String) {
+        selectedTheme = MainTheme(folder: themeName)
+        UserDefaults.appTheme = themeName
+    }
+
+    private func loadTheme() {
+        let themeName = UserDefaults.appTheme
+        selectedTheme = MainTheme(folder: ThemeName(rawValue: themeName)?.rawValue ?? ThemeName.main.rawValue)
+    }
+
 }

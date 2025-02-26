@@ -19,15 +19,15 @@ extension Font {
     static  func customFont(fontType: FontWeight, size: CGFloat) -> Font {
         switch fontType {
         case .light:
-            Font.custom("Poppins-Light", size: size)
+            Font.custom("Roboto-Light", size: size)
         case .medium:
-            Font.custom("Poppins-Medium", size: size)
+            Font.custom("Roboto-Medium", size: size)
         case .bold:
-            Font.custom("Poppins-Bold", size: size)
+            Font.custom("Roboto-Bold", size: size)
         case .black:
-            Font.custom("Poppins-Black", size: size)
+            Font.custom("Roboto-Black", size: size)
         case .regular:
-            Font.custom("Poppins-Regular", size: size)
+            Font.custom("Roboto-Regular", size: size)
         }
     }
 }
