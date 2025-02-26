@@ -26,4 +26,7 @@ struct UserDefault<Value> {
 extension UserDefaults {
     @UserDefault(key: "show_home", defaultValue: false)
     static var showHome: Bool
+
+    @UserDefault(key: "app_theme", defaultValue: ThemeName.main.rawValue)
+    static var appTheme: String
 }

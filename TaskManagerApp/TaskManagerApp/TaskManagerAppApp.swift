@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct TaskManagerAppApp: App {
+    @StateObject var themeManager = ThemeManager()
+
     var body: some Scene {
         WindowGroup {
             TAppView()
+                .environmentObject(themeManager)
         }
     }
 }

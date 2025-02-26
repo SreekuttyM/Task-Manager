@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct TaskListView: View {
+    @EnvironmentObject var theme: ThemeManager
+
     var body: some View {
         ZStack {
-            GradientBackgroundView()
+            GradientBackgroundView(colors: [theme.selectedTheme.accentColor, theme.selectedTheme.primaryThemeColor, theme.selectedTheme.primaryThemeColor, theme.selectedTheme.primaryThemeColor])
         }
     }
 }

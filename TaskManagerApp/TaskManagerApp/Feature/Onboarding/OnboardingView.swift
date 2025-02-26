@@ -13,7 +13,7 @@ struct OnboardingView: View {
 
     var body: some View {
         ZStack {
-            GradientBackgroundView()
+            GradientBackgroundView(colors: [theme.selectedTheme.accentColor, theme.selectedTheme.primaryThemeColor, theme.selectedTheme.primaryThemeColor, theme.selectedTheme.primaryThemeColor])
             VStack {
                 topLogo
                     .padding(.top, 70)
@@ -34,10 +34,10 @@ struct OnboardingView: View {
     private var header: some View {
         VStack {
             Text("Taskify").font(theme.selectedTheme.largeTitleFont)
-                .foregroundStyle(TColor.accent)
+                .foregroundStyle(theme.selectedTheme.accentColor)
             Text("Organize Your Tasks and Goals")
                 .font(theme.selectedTheme.textTitleFont)
-                .foregroundStyle(TColor.accent)
+                .foregroundStyle(theme.selectedTheme.accentColor)
         }
     }
 
@@ -46,7 +46,7 @@ struct OnboardingView: View {
             // action
             root.updateViewState(showHome: true)
         } label: {
-            Text("GET STARTED >>").navigationActionModifier()
+            Text("GET STARTED >>").navigationActionModifier(color: theme.selectedTheme.accentColor)
         }
     }
 }

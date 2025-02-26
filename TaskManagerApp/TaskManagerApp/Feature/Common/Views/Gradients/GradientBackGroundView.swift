@@ -9,15 +9,15 @@ import SwiftUI
 
 struct GradientBackgroundView: View {
     var colors: [Color]
-    init(colors: [Color] = [TColor.accent, TColor.primary, TColor.primary, TColor.primary]) {
+    init(colors: [Color] ) {
         self.colors = colors
     }
     var body: some View {
         ZStack {
             LinearGradient(
                 gradient: Gradient(colors: colors),
-                startPoint: .top,
-                endPoint: .bottom
+                startPoint: .topTrailing,
+                endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
         }

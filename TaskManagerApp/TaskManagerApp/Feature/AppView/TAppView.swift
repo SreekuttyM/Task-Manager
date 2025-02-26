@@ -9,7 +9,6 @@ import SwiftUI
 
 struct TAppView: View {
     @StateObject var appState: TAppState = TAppState()
-    @StateObject var themeManager = ThemeManager()
 
     var body: some View {
         AppViewBuilder(
@@ -20,7 +19,7 @@ struct TAppView: View {
                 OnboardingView()
             }
         ).environmentObject(appState)
-         .environmentObject(themeManager)
+
     }
 }
 

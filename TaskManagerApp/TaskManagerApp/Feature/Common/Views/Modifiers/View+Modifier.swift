@@ -8,12 +8,13 @@
 import SwiftUI
 
 extension View {
-    func navigationActionModifier() -> some View {
+    func navigationActionModifier(color: Color) -> some View {
         self.padding()
             .frame(maxWidth: .infinity, alignment: .center)
-            .font(.customFont(fontType: .bold, size: 20))
+            .font(.customFont(fontType: .black, size: 20))
+            .kerning(1)
             .foregroundStyle(.white)
-            .background(.accent)
+            .background(color)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .padding()
 
