@@ -29,7 +29,9 @@ struct MainTheme: ThemeProtocol {
         self.folder = folder
     }
 
-    var accentColor: Color { Color("AccentColor_\(folder)", bundle: Bundle(path: "Color")) }
+    var accentColor: Color {
+        Color("AccentColor_\(folder)", bundle: Bundle(path: "Color"))
+    }
     var primaryThemeColor: Color { Color("TPrimaryColor_\(folder)", bundle: Bundle(path: "Color")) }
     var secondoryThemeColor: Color { Color("TSecondaryColor_\(folder)", bundle: Bundle(path: "Color")) }
 

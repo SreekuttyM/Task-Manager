@@ -20,8 +20,11 @@ struct OnboardingView: View {
                 Spacer()
                 header
                     .padding(.bottom, 30)
-                bottomButton
-                    .padding(.bottom, 40)
+                ActionButtonView(title: "GET STARTED >>", action: {
+                    root.updateViewState(showHome: true)
+
+                })
+                .padding(.bottom, 40)
             }
         }
     }
@@ -35,18 +38,10 @@ struct OnboardingView: View {
         VStack {
             Text("Taskify").font(theme.selectedTheme.largeTitleFont)
                 .foregroundStyle(theme.selectedTheme.accentColor)
+                .padding(.bottom, 5)
             Text("Organize Your Tasks and Goals")
-                .font(theme.selectedTheme.textTitleFont)
+                .font(theme.selectedTheme.subTextFont)
                 .foregroundStyle(theme.selectedTheme.accentColor)
-        }
-    }
-
-    private var bottomButton: some View {
-        Button {
-            // action
-            root.updateViewState(showHome: true)
-        } label: {
-            Text("GET STARTED >>").navigationActionModifier(color: theme.selectedTheme.accentColor)
         }
     }
 }

@@ -45,48 +45,20 @@ struct SettingsView: View {
                 spacing: 10,
                 pinnedViews: [.sectionHeaders],
                 content: {
-                    Section(content: {
+                    Section {
                         ForEach(viewModel.colors, id: \.self) { color in
                             CircleView(color: color["color"] ?? "", themeString: color["theme"] ?? "", selectedThemeString: $viewModel.selectedThemeString, theme: _theme)
                         }
-                    })
+                    }
                 }
             )
-
         }
     }
 
     private var bottomButton: some View {
-        Button {
-            // action
+        ActionButtonView(title: "CHANGE", action: {
             theme.setTheme(viewModel.selectedThemeString)
-
-        } label: {
-            Text("CHANGE")
-                .navigationActionModifier(color: theme.selectedTheme.accentColor)
-        }
-    }
-}
-
-struct CircleView: View {
-    var color: String
-    var themeString: String
-
-    @Binding var selectedThemeString: String
-    @EnvironmentObject var theme: ThemeManager
-
-    var body: some View {
-        Circle()
-            .fill(.white)
-            .overlay(
-                Color(hex: color)
-                    .clipShape(Circle())
-                    .padding(selectedThemeString == themeString ? 10 : 0)
-            )
-            .onTapGesture {
-                selectedThemeString = themeString
-            }
-
+        })
     }
 }
 
