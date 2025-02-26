@@ -18,5 +18,5 @@ struct TaskListView: View {
 }
 
 #Preview {
-    TaskListView()
+    TaskListView().environmentObject(ThemeManager())
 }
