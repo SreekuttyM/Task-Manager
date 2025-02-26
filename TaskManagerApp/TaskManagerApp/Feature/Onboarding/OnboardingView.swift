@@ -9,12 +9,14 @@ import SwiftUI
 
 struct OnboardingView: View {
     @EnvironmentObject var root: TAppState
+    @EnvironmentObject var theme: ThemeManager
+
     var body: some View {
         ZStack {
-            GradientBackgroundView(colors: [TColor.accent, TColor.accent, TColor.secondary])
+            GradientBackgroundView()
             VStack {
                 topLogo
-                    .padding(.top, 150)
+                    .padding(.top, 70)
                 Spacer()
                 header
                     .padding(.bottom, 30)
@@ -31,11 +33,11 @@ struct OnboardingView: View {
 
     private var header: some View {
         VStack {
-            Text("Taskify").font(.customFont(fontType: .black, size: 40))
-                .foregroundStyle(TColor.primary)
+            Text("Taskify").font(theme.selectedTheme.largeTitleFont)
+                .foregroundStyle(TColor.accent)
             Text("Organize Your Tasks and Goals")
-                .font(.customFont(fontType: .light, size: 20))
-                .foregroundStyle(TColor.primary)
+                .font(theme.selectedTheme.textTitleFont)
+                .foregroundStyle(TColor.accent)
         }
     }
 
@@ -50,5 +52,5 @@ struct OnboardingView: View {
 }
 
 #Preview {
-    OnboardingView()
+    OnboardingView().environmentObject(ThemeManager())
 }
