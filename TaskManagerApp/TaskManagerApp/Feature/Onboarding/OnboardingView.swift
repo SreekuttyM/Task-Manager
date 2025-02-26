@@ -9,17 +9,22 @@ import SwiftUI
 
 struct OnboardingView: View {
     @EnvironmentObject var root: TAppState
+    @EnvironmentObject var theme: ThemeManager
+
     var body: some View {
         ZStack {
-            GradientBackgroundView(colors: [TColor.accent, TColor.accent, TColor.secondary])
+            GradientBackgroundView(colors: [theme.selectedTheme.accentColor, theme.selectedTheme.primaryThemeColor, theme.selectedTheme.primaryThemeColor, theme.selectedTheme.primaryThemeColor])
             VStack {
                 topLogo
-                    .padding(.top, 150)
+                    .padding(.top, 70)
                 Spacer()
                 header
                     .padding(.bottom, 30)
-                bottomButton
-                    .padding(.bottom, 40)
+                ActionButtonView(title: "GET STARTED >>", action: {
+                    root.updateViewState(showHome: true)
+
+                })
+                .padding(.bottom, 40)
             }
         }
     }
@@ -31,24 +36,16 @@ struct OnboardingView: View {
 
     private var header: some View {
         VStack {
-            Text("Taskify").font(.customFont(fontType: .black, size: 40))
-                .foregroundStyle(TColor.primary)
+            Text("Taskify").font(theme.selectedTheme.largeTitleFont)
+                .foregroundStyle(theme.selectedTheme.accentColor)
+                .padding(.bottom, 5)
             Text("Organize Your Tasks and Goals")
-                .font(.customFont(fontType: .light, size: 20))
-                .foregroundStyle(TColor.primary)
-        }
-    }
-
-    private var bottomButton: some View {
-        Button {
-            // action
-            root.updateViewState(showHome: true)
-        } label: {
-            Text("GET STARTED >>").navigationActionModifier()
+                .font(theme.selectedTheme.subTextFont)
+                .foregroundStyle(theme.selectedTheme.accentColor)
         }
     }
 }
 
 #Preview {
-    OnboardingView()
+    OnboardingView().environmentObject(ThemeManager())
 }

@@ -9,15 +9,17 @@ import SwiftUI
 
 struct TAppView: View {
     @StateObject var appState: TAppState = TAppState()
+
     var body: some View {
         AppViewBuilder(
             showHome: appState.showHome,
             homeView: {
-                Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+                TabbedView()
             }, onBoardingView: {
                 OnboardingView()
             }
         ).environmentObject(appState)
+
     }
 }
 
