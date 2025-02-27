@@ -10,6 +10,7 @@ import SwiftUI
 protocol ThemeProtocol {
     var largeTitleFont: Font { get }
     var textTitleFont: Font { get }
+    var secondaryTextTitleFont: Font { get }
     var subTextFont: Font { get }
 
     var accentColor: Color { get }

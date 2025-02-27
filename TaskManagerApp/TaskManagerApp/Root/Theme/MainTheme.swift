@@ -38,5 +38,6 @@ struct MainTheme: ThemeProtocol {
     var largeTitleFont: Font = .customFont(fontType: .black, size: 30)
     var textTitleFont: Font = .customFont(fontType: .bold, size: 20)
     var subTextFont: Font = .customFont(fontType: .light, size: 15)
+    var secondaryTextTitleFont: Font = .customFont(fontType: .medium, size: 15)
 
 }
