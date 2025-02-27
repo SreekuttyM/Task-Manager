@@ -29,5 +29,5 @@ struct TabbedView: View {
 }
 
 #Preview {
-    TabbedView()
+    TabbedView().environmentObject(ThemeManager())
 }
