@@ -14,55 +14,69 @@ struct TaskListView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            List(0...100, id: \.self) { i in
-                Text("\(i)")
+            taskItemList
+            .task {
+                await viewModel.fetchTasks()
             }
-             .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Menu(content: {
-                            Button("Sorting", action: {
-                                viewModel.selectedSearchOption = .Sort
-                                viewModel.isPresented = true
-                            })
-                            Button("Filter", action: {
-                                viewModel.selectedSearchOption = .Filter
-                                viewModel.isPresented = true
-                            })
-                        }) {
+            .navigationTitle(TStrings.NTTaskList)
+            .navigationBarTitleTextColor(theme.selectedTheme.secondoryThemeColor)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: String.self) { route in
+                switch route {
+                    case "CreateTask":
+                        AddTaskView( viewModel: AddTaskViewModel(action: .AddTask))
+                    default:
+                        AddTaskView( viewModel: AddTaskViewModel(action: .AddTask))
+                }
+            }
+            .self.safeAreaInset(edge: .bottom, alignment: .trailing) {
+                plusButton
+            }.padding(.all, 30)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu(content: {
+                        Button("Sorting", action: {
+                            viewModel.selectedSearchOption = .Sort
+                            viewModel.isPresented = true
+                        })
+                        Button("Filter", action: {
+                            viewModel.selectedSearchOption = .Filter
+                            viewModel.isPresented = true
+                        })
+                    }) {
                         Image(systemName: "line.3.horizontal.decrease.circle.fill")
-                                .font(.system(size: 21))
-                        }
+                            .font(.system(size: 21))
                     }
-             }.sheet(isPresented: $viewModel.isPresented) {
+                }
+            }
+            .sheet(isPresented: $viewModel.isPresented) {
                     SearchOptionsMenu(title: viewModel.selectedSearchOption.rawValue, searchOption: viewModel.selectedSearchOption).presentationDetents([.height(350), .medium, .large])
                         .presentationDragIndicator(.automatic)
                 }
 
-            .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                plusButton.padding(.all, 30)
-            }
-        }.navigationDestination(for: String.self) { route in
-            switch route {
-                case "CreateTask":
-                    CreateTaskView()
-
-                default:
-                    CreateTaskView()
-
-            }
         }
 
     }
 
     private var plusButton: some View {
-        Button {
-            viewModel.isAnimated = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                path.append("CreateTask")
-                viewModel.isAnimated = false
+            Button {
+                viewModel.isAnimated = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    path.append("CreateTask")
+                    viewModel.isAnimated = false
+                }
+            } label: {
+                PulseEffectCircle(isOn: $viewModel.isAnimated)
             }
-        } label: {
-            PulseEffectCircle(isOn: $viewModel.isAnimated)
+    }
+
+    private var taskItemList: some View {
+        ScrollView {
+            LazyVStack(alignment: .leading) {
+                ForEach($viewModel.array_tasks, id: \.self) { task in
+                    TaskListItem(taskModel: task)
+                }
+            }
         }
     }
 
