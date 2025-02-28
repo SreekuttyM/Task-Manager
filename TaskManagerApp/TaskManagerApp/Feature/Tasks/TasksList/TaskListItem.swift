@@ -9,36 +9,36 @@ import SwiftUI
 
 struct TaskListItem: View {
     @EnvironmentObject var theme: ThemeManager
-    @Binding var taskModel: TaskModel
+    var taskModel: TaskModel
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(taskModel.taskTitle)
-                .font(theme.selectedTheme.textTitleFont)
-                .foregroundStyle(theme.selectedTheme.accentColor)
-            Text(taskModel.taskDescription)
-                .font(theme.selectedTheme.secondaryTextTitleFont)
-                .foregroundStyle(theme.selectedTheme.accentColor)
-                .padding(.bottom, 10)
-            HStack {
-                Text(self.dayDifference(from: taskModel.taskCreationDate)).font(theme.selectedTheme.subTextFont)
-                    .foregroundStyle(theme.selectedTheme.secondoryThemeColor)
-                    .font(theme.selectedTheme.subTextFont)
-                Spacer()
-                Text(taskModel.getTaskPriorityString())
+        ZStack {
+            VStack(alignment: .leading) {
+                Text(taskModel.taskTitle)
+                    .font(theme.selectedTheme.textTitleFont)
+                    .foregroundStyle(theme.selectedTheme.accentColor)
+                Text(taskModel.taskDescription)
                     .font(theme.selectedTheme.secondaryTextTitleFont)
-                   Image(systemName: "flag.fill")
-                    .foregroundStyle(self.getPriorityColor(priority: taskModel.taskPriority))
+                    .foregroundStyle(theme.selectedTheme.accentColor)
+                    .padding(.bottom, 10)
+                HStack {
+                    Text(self.dayDifference(from: taskModel.taskCreationDate)).font(theme.selectedTheme.subTextFont)
+                        .foregroundStyle(theme.selectedTheme.secondoryThemeColor)
+                        .font(theme.selectedTheme.subTextFont)
+                    Spacer()
+                    Text(taskModel.getTaskPriorityString())
+                        .font(theme.selectedTheme.secondaryTextTitleFont)
+                       Image(systemName: "flag.fill")
+                        .foregroundStyle(self.getPriorityColor(priority: taskModel.taskPriority))
 
-            }
-        }
-        .padding()
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.white)
-                        .shadow(radius: 1)
-                )
-                .padding([.top, .horizontal])
+                }
+            }.padding(.all, 10)
+        } .frame(height: 120)    .clipShape(RoundedRectangle(cornerRadius: 10))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.white)
+                    .shadow(radius: 1)
+            )
+            .padding(.all)
     }
 
     private func dayDifference(from date: Date) -> String {
@@ -64,5 +64,5 @@ struct TaskListItem: View {
 }
 
  #Preview {
-     TaskListItem(taskModel: .constant(TaskModel(taskCreationDate: Date.now.addingTimeInterval(1740860831), taskDescription: "Start with the progress view logic and aim to finish it by tomorrow", taskPriority: .Low, taskTitle: "Refactor Checkout Module"))).environmentObject(ThemeManager())
+     TaskListItem(taskModel: (TaskModel(taskId: UUID(), taskCreationDate: Date.now.addingTimeInterval(1740860831), taskDescription: "Start with the progress view logic and aim to finish it by tomorrow", taskPriority: .Low, taskTitle: "Refactor Checkout Module", isCompleted: false))).environmentObject(ThemeManager())
  }

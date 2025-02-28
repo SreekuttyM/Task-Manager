@@ -8,10 +8,19 @@
 import SwiftUI
 
 struct AddTaskView: View {
+    @State  var isSubmitted: Bool = false
+    @StateObject private var viewModel: AddTaskViewModel
+    @ObservedObject var router: NavigationRouter
 
-    @StateObject var viewModel: AddTaskViewModel = AddTaskViewModel(action: .AddTask)
+    var onSave: ((TaskModel) -> Void)?
 
-    @State private var isSubmitted: Bool = false
+    init( action: ViewAction, task: TaskModel? = nil, onSave: ((TaskModel) -> Void)? = nil, router: NavigationRouter) {
+        _viewModel = StateObject(wrappedValue: AddTaskViewModel(action: action, taskModel: task))
+        if let onSave = onSave {
+            self.onSave = onSave
+        }
+        _router =  ObservedObject(wrappedValue: router)
+    }
 
     var body: some View {
 
@@ -28,18 +37,30 @@ struct AddTaskView: View {
                 Text("Select a date")
             }
             Section {
-                Button("Save", action: {
+                FormViewActionButton(action: {
                     if !viewModel.disableForm {
                         viewModel.saveTask()
                     }
-                })
-                .alert(isPresented: $isSubmitted) {
-                    Alert(
-                        title: Text("Saved"),
-                        message: Text("Task is created"),
-                        dismissButton: .default(Text("OK"))
-                    )
+                    router.goBack()
+
+                }, title: "Submit")
+
+                if !self.viewModel.isCompleted {
+                    FormViewActionButton(action: {
+                        if !viewModel.disableForm {
+                            viewModel.markTaskToComplete()
+                        }
+                        router.goBack()
+
+                    }, title: "Complete")
                 }
+                FormViewActionButton(action: {
+                    if !viewModel.disableForm {
+                        viewModel.deleteTaskModel()
+                    }
+                    router.goBack()
+                }, title: "Delete")
+
             }
             .disabled(viewModel.disableForm)
 
@@ -51,5 +72,5 @@ struct AddTaskView: View {
 }
 
  #Preview {
-    AddTaskView()
+     AddTaskView(action: .AddTask, router: NavigationRouter())
  }

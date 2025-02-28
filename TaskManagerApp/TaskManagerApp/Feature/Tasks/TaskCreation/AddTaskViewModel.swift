@@ -23,23 +23,36 @@ enum TaskPriority: Int, CaseIterable {
 class AddTaskViewModel: ObservableObject {
     var action: ViewAction
     var taskManager: TaskManager = TaskManager(coreDataManager: CoreDataManager())
-    @Published  var name = ""
-    @Published  var description = ""
-    @Published  var taskCreatedDate = Date.now
-    @Published  var selectedPriority: TaskPriority = .Low
+    @Published  var taskId: UUID
+    @Published  var name: String
+    @Published  var description: String
+    @Published  var taskCreatedDate: Date
+    @Published  var selectedPriority: TaskPriority
+    @Published  var isCompleted: Bool
+
     @Published var title: String = ""
+    var taskModel: TaskModel?  // If nil, it's an "Add" operation
 
     private var cancellables = Set<AnyCancellable>()
     var disableForm: Bool {
         name.isEmpty || description.isEmpty
     }
 
-    init(action: ViewAction, task: TaskModel? = nil) {
+    init(action: ViewAction, taskModel: TaskModel? = nil) {
+        self.taskModel = taskModel
+        self.taskId = taskModel?.taskId ?? UUID()
+        self.name = taskModel?.taskTitle ?? ""
+        self.description = taskModel?.taskDescription ?? ""
+        self.taskCreatedDate = taskModel?.taskCreationDate ?? Date.now
+        self.selectedPriority = taskModel?.taskPriority ?? .Low
+        self.isCompleted = taskModel?.isCompleted ?? false
+
         self.action = action
-        if self.action == .AddTask {
-            title = TStrings.NTAddTask
-        } else {
-            title = TStrings.NTEditTask
+        switch action {
+            case .AddTask:
+                self.title = TStrings.NTAddTask
+            case .EditTask:
+                self.title = TStrings.NTEditTask
         }
     }
 
@@ -54,4 +67,12 @@ class AddTaskViewModel: ObservableObject {
         taskManager.createTaskItem(title: name, description: description, date: taskCreatedDate, prority: selectedPriority.rawValue)
     }
 
+    func markTaskToComplete() {
+        isCompleted.toggle()
+        taskManager.markAsComplete(taskId: self.taskId, isCompleted: isCompleted)
+    }
+
+    func deleteTaskModel() {
+        taskManager.deleteSingleTask(taskId: self.taskId)
+    }
 }
