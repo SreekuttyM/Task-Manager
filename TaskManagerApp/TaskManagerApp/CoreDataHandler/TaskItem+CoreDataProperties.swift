@@ -21,6 +21,7 @@ extension TaskItem {
     @NSManaged public var taskTitle: String
     @NSManaged public var isComplete: Bool
     @NSManaged public var taskId: UUID
+    @NSManaged public var taskProgress: Double
 
 }
 
