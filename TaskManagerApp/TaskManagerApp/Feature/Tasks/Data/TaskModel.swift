@@ -13,6 +13,7 @@ struct TaskModel: Hashable {
     var taskDescription: String
     var taskPriority: TaskPriority
     var taskTitle: String
+    var taskProgress: Double
     var isCompleted: Bool
 
     func getTaskPriorityString() -> String {

@@ -28,6 +28,7 @@ class AddTaskViewModel: ObservableObject {
     @Published  var description: String
     @Published  var taskCreatedDate: Date
     @Published  var selectedPriority: TaskPriority
+    @Published  var taskProgress: CGFloat
     @Published  var isCompleted: Bool
 
     @Published var title: String = ""
@@ -45,6 +46,7 @@ class AddTaskViewModel: ObservableObject {
         self.description = taskModel?.taskDescription ?? ""
         self.taskCreatedDate = taskModel?.taskCreationDate ?? Date.now
         self.selectedPriority = taskModel?.taskPriority ?? .Low
+        self.taskProgress = Double(taskModel?.taskProgress ?? 0)
         self.isCompleted = taskModel?.isCompleted ?? false
 
         self.action = action
@@ -63,16 +65,24 @@ class AddTaskViewModel: ObservableObject {
         self.taskCreatedDate = task.taskCreationDate
     }
 
-    func saveTask() {
-        taskManager.createTaskItem(title: name, description: description, date: taskCreatedDate, prority: selectedPriority.rawValue)
+    func update() {
+        if action == .EditTask {
+            taskManager.editTask(taskId: taskId, title: name, description: description, date: taskCreatedDate, prority: selectedPriority.rawValue, taskProgress: taskProgress)
+        } else {
+            taskManager.createTaskItem(title: name, description: description, date: taskCreatedDate, prority: selectedPriority.rawValue, taskProgress: taskProgress)
+        }
     }
 
     func markTaskToComplete() {
         isCompleted.toggle()
-        taskManager.markAsComplete(taskId: self.taskId, isCompleted: isCompleted)
+        taskManager.markAsComplete(taskId: self.taskId, isCompleted: isCompleted, taskProgress: taskProgress)
     }
 
     func deleteTaskModel() {
         taskManager.deleteSingleTask(taskId: self.taskId)
+    }
+
+    func showFormButtons() -> Bool {
+        return action == .EditTask
     }
 }

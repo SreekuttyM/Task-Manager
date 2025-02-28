@@ -9,11 +9,10 @@ import SwiftUI
 
 struct TabbedView: View {
     @EnvironmentObject var theme: ThemeManager
-    @StateObject private var router = NavigationRouter()
 
     var body: some View {
         TabView {
-            TaskListView(router: router)
+            HomeScreen()
                 .tabItem {
                     Label("Tasks",
                           systemImage: "square.and.pencil.circle.fill")
@@ -27,8 +26,12 @@ struct TabbedView: View {
                 }
                 .tag(2)
         }.tint(theme.selectedTheme.accentColor)
-
+            .onAppear(perform: {
+                        UITabBar.appearance().unselectedItemTintColor = .systemBrown
+                        UITabBar.appearance().backgroundColor = .systemGray4.withAlphaComponent(0.4)
+                    })
     }
+
 }
 
 #Preview {

@@ -33,7 +33,7 @@ final class TaskManagerTestCases: XCTestCase {
     }
 
     func test_insertOneItemReceiveOneItem() async throws {
-        sut.createTaskItem(title: "Title 1", description: "Title 2", date: Date.now, prority: TaskPriority.Low.rawValue)
+        sut.createTaskItem(taskId: UUID(), title: "Title 1", description: "Title 2", date: Date.now, prority: TaskPriority.Low.rawValue, taskProgress: 0.5)
 //        var results: [TaskModel] = []
 //        _ = Task {
 //            results = try await sut.fetchTaskList()
@@ -49,8 +49,8 @@ final class TaskManagerTestCases: XCTestCase {
     }
 
     func test_insertingTwoItemsReceiveTwoItems() async throws {
-        sut.createTaskItem(title: "Title 1", description: "Title 2", date: Date.now, prority: TaskPriority.Low.rawValue)
-        sut.createTaskItem(title: "Title 2", description: "Title 3", date: Date.now, prority: TaskPriority.Low.rawValue)
+        sut.createTaskItem(taskId: UUID(), title: "Title 1", description: "Title 2", date: Date.now, prority: TaskPriority.Low.rawValue, taskProgress: 0.5)
+        sut.createTaskItem(taskId: UUID(), title: "Title 2", description: "Title 3", date: Date.now, prority: TaskPriority.Low.rawValue, taskProgress: 0.5)
         let results = try await sut.fetchTaskList()
 
         XCTAssertEqual(results.count, 2)
