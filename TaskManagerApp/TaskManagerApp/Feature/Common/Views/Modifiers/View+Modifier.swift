@@ -20,6 +20,27 @@ extension View {
 
     }
 
+    func headerTextHeading(theme: ThemeManager) -> some View {
+        self
+            .font(theme.selectedTheme.largeTitleFont)
+            .foregroundColor(theme.selectedTheme.secondoryThemeColor)
+
+    }
+
+    func primaryTextHeading(theme: ThemeManager) -> some View {
+        self
+            .font(theme.selectedTheme.secondaryTextTitleFont)
+            .foregroundColor(theme.selectedTheme.secondoryThemeColor)
+
+    }
+
+    func secondaryTextHeading(theme: ThemeManager) -> some View {
+        self
+            .font(theme.selectedTheme.subTextFont)
+            .foregroundColor(theme.selectedTheme.secondoryThemeColor)
+
+    }
+
     func navigationBarTitleTextColor(_ color: Color) -> some View {
         let uiColor = UIColor(color)
 
@@ -28,6 +49,13 @@ extension View {
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: uiColor ]
 
         return self
+    }
+
+    func navigationModifierWith(color: Color, title: String) -> some View {
+        self
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(title)
+        .navigationBarTitleTextColor(color)
     }
 
 }

@@ -10,62 +10,64 @@ import SwiftUI
 struct SearchOptionsMenu: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var theme: ThemeManager
+    @Binding var isSearchOptionEnabled: (sort: SortOption?, filterOption: FilterOption?)?
     var title: String
     var searchOption: SearchOption
-    @Binding var isSearchOptionEnabled: (sort: SortOption?, filterOption: FilterOption?)?
+    var sortlist = ["Priority", "Date", "Alphabetical Order"]
+    var filterList = ["All", "Pending", "Completed"]
 
-    @State var optionList: [String] = []
     var body: some View {
         VStack {
-            Text(title)
-                .font(theme.selectedTheme.textTitleFont)
-                .foregroundStyle(theme.selectedTheme.accentColor)
-                .padding(.top, 20)
-                .padding(.bottom, 5)
-            Text("Order Tasks By")
-                .font(theme.selectedTheme.subTextFont)
-                .foregroundStyle(theme.selectedTheme.accentColor)
+            HeaderView
             ScrollView(.vertical, showsIndicators: false) {
                 if searchOption == .Filter {
-                    VStack(alignment: .center, spacing: 0) {
-                        ActionButtonView(title: "All") {
-                            isSearchOptionEnabled = (sort: nil, filterOption: nil)
-                            dismiss()
-
-                        }
-                        ActionButtonView(title: "Pending") {
-                            isSearchOptionEnabled = (sort: nil, filterOption: FilterOption.Pending)
-                            dismiss()
-
-                        }
-                        ActionButtonView(title: "Completed") {
-                            isSearchOptionEnabled = (sort: nil, filterOption: FilterOption.Completed)
-                            dismiss()
-
-                        }
-                    }
+                    FilterOptionList
                 } else {
-                    VStack(alignment: .center, spacing: 0) {
-                        ActionButtonView(title: "Priority") {
-                            isSearchOptionEnabled = (sort: SortOption.Priority, filterOption: nil)
-                            dismiss()
-
-                        }
-                        ActionButtonView(title: "Date") {
-                            isSearchOptionEnabled = (sort: SortOption.Date, filterOption: nil)
-                            dismiss()
-                        }
-                        ActionButtonView(title: "Alphabetical Order") {
-                            isSearchOptionEnabled = (sort: SortOption.Alphabetical, filterOption: nil)
-                            dismiss()
-                        }
-                    }
+                    SortOptionList
                 }
+            }
+        }
+    }
+
+    private var HeaderView: some View {
+        VStack {
+            Text(title)
+                .headerTextHeading(theme: theme)
+                .padding(.top, 20)
+                .padding(.bottom, 5)
+                .accessible(.text)
+            Text("\(title.capitalized) Tasks By")
+                .secondaryTextHeading(theme: theme)
+                .accessible(.text)
+
+        }
+    }
+
+    private var SortOptionList: some View {
+        VStack(alignment: .center, spacing: 0) {
+            ForEach(FilterOption.allCases, id: \.self) { filterOption in
+                FormViewActionButton(action: {
+                    isSearchOptionEnabled = (sort: nil, filterOption: filterOption)
+                    dismiss()
+                }, title: filterOption.rawValue
+                ).padding()
+            }
+        }
+    }
+
+    private var FilterOptionList: some View {
+        VStack(alignment: .center, spacing: 0) {
+            ForEach(SortOption.allCases, id: \.self) { filterOption in
+                FormViewActionButton(action: {
+                    isSearchOptionEnabled = (sort: filterOption, filterOption: nil)
+                    dismiss()
+                }, title: filterOption.rawValue
+                ).padding()
             }
         }
     }
 }
 
 #Preview {
-    SearchOptionsMenu(title: "Sort", searchOption: .Sort, isSearchOptionEnabled: .constant(nil)).environmentObject(ThemeManager())
+    SearchOptionsMenu(isSearchOptionEnabled: .constant(nil), title: "Sort", searchOption: .Sort).environmentObject(ThemeManager())
 }

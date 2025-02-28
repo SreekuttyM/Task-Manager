@@ -7,90 +7,83 @@
 
 import SwiftUI
 
-enum NavigationDestination {
-    case AddTask(viewModel: AddTaskViewModel)
-}
-
 struct TaskListView: View {
-    @EnvironmentObject var theme: ThemeManager
-    @StateObject var viewModel: TaskListViewModel =  TaskListViewModel()
+    @ObservedObject var viewModel: TaskListViewModel
     @ObservedObject  var router: NavigationRouter
+    @State var deleteAlert: Bool = false
+    @State var completeAlert: Bool = false
+    @State  var selectedTask: TaskModel?
 
     var body: some View {
-        NavigationStack(path: $router.path) {
-            taskItemList
-                .task {
-                    await viewModel.fetchTasks()
-                }
-                .navigationDestination(for: NavigationRoute.self) { route in
-                    switch route {
-                        case .addTask(let action):
-                            AddTaskView(action: action, router: router)
-                        case .editAtsk(let action, let taskModel):
-                            AddTaskView(action: action, task: taskModel, router: router)
-                    }
-                }.navigationTitle(TStrings.NTTaskList)
-                .navigationBarTitleTextColor(theme.selectedTheme.secondoryThemeColor)
-                .navigationBarTitleDisplayMode(.inline)
+        List {
+            ForEach(viewModel.array_tasks, id: \.self) { task in
 
-                .self.safeAreaInset(edge: .bottom, alignment: .trailing) {
-                    plusButton
-                }.padding(.all, 20)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Menu(content: {
-                            Button("Sorting", action: {
-                                viewModel.selectedSearchOption = .Sort
-                                viewModel.isPresented = true
-                            })
-                            Button("Filter", action: {
-                                viewModel.selectedSearchOption = .Filter
-                                viewModel.isPresented = true
-                            })
-                        }) {
-                            Image(systemName: "line.3.horizontal.decrease.circle.fill")
-                                .font(.system(size: 21))
+                TaskListItem(taskModel: task)
+
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            selectedTask = task
+                            deleteAlert = true
+                        } label: {
+                            Label("Delete", systemImage: "trash")
                         }
+                        .accessible(.button)
+                        Button {
+                            selectedTask = task
+                            completeAlert = true
+                        } label: {
+                            Label("Mark As Complete", systemImage: "checkmark")
+                        }
+                        .accessible(.button)
+
                     }
-                }.sheet(isPresented: $viewModel.isPresented) {
-                    SearchOptionsMenu(title: viewModel.selectedSearchOption.rawValue, searchOption: viewModel.selectedSearchOption, isSearchOptionEnabled: $viewModel.isSearchOptionEnabled).presentationDetents([.height(350), .medium, .large])
-                        .presentationDragIndicator(.automatic)
-                }
+                    .onTapGesture {
+                        router.navigate(to: .editAtsk(action: .EditTask, taskModel: task))
+                    }
+            } .onMove(perform: moveItem)
 
-        }
-
-    }
-
-    private var plusButton: some View {
-            Button {
-                viewModel.isAnimated = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    router.navigate(to: .addTask(action: .AddTask))
-                    viewModel.isAnimated = false
-                }
-            } label: {
-                PulseEffectCircle(isOn: $viewModel.isAnimated)
-            }
-    }
-
-    private var taskItemList: some View {
-        ScrollView {
-            LazyVStack(alignment: .leading) {
-                if viewModel.array_tasks.count > 0 {
-                    ForEach(viewModel.array_tasks, id: \.self) { task in
-                        TaskListItem(taskModel: task)
-                            .onTapGesture {
-                                router.navigate(to: .editAtsk(action: .EditTask, taskModel: task))
+        }.listStyle(.insetGrouped)
+            .alert("Are you sure you want to delete the task?", isPresented: $deleteAlert, actions: {
+                        Button("Cancel", role: .cancel) { }
+                       .accessible(.button)
+                        Button("Delete", role: .destructive) {
+                            if let task = selectedTask {
+                                deleteTask(task: task)
                             }
-                    }
-                } else {
-                    TaskListShimmerView()
-                }
-            }
-        }
+                        }.accessible(.button)
+                    })
+            .alert("Are you sure you want to mark it as complete?", isPresented: $completeAlert, actions: {
+                        Button("Cancel", role: .cancel) { }
+                       .accessible(.button)
+                        Button("Mark As Complete", role: .destructive) {
+                            if let task = selectedTask {
+                                markComplete(task: task)
+                            }
+                        }.accessible(.button)
+                    })
+
     }
+
+    func moveItem(from source: IndexSet, to destination: Int) {
+        viewModel.array_tasks.move(fromOffsets: source, toOffset: destination)
+        triggerHaptic(style: .light)
+       }
+
+    func deleteTask(task: TaskModel) {
+        viewModel.deleteTaskModel(selectedTask: task)
+    }
+
+    func markComplete(task: TaskModel) {
+        viewModel.markTaskToComplete(selectedTask: task)
+    }
+
+    func triggerHaptic(style: UIImpactFeedbackGenerator.FeedbackStyle) {
+           let generator = UIImpactFeedbackGenerator(style: style)
+           generator.prepare()
+           generator.impactOccurred()
+       }
 }
 
 #Preview {
-    TaskListView(router: NavigationRouter()).environmentObject(ThemeManager())
+    TaskListView(viewModel: TaskListViewModel(), router: NavigationRouter()).environmentObject(ThemeManager())
 }

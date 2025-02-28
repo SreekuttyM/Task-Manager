@@ -9,36 +9,36 @@ import SwiftUI
 
 struct TaskListItem: View {
     @EnvironmentObject var theme: ThemeManager
-    var taskModel: TaskModel
+     var taskModel: TaskModel
     var body: some View {
-        ZStack {
-            VStack(alignment: .leading) {
-                Text(taskModel.taskTitle)
-                    .font(theme.selectedTheme.textTitleFont)
-                    .foregroundStyle(theme.selectedTheme.accentColor)
-                Text(taskModel.taskDescription)
-                    .font(theme.selectedTheme.secondaryTextTitleFont)
-                    .foregroundStyle(theme.selectedTheme.accentColor)
-                    .padding(.bottom, 10)
-                HStack {
-                    Text(self.dayDifference(from: taskModel.taskCreationDate)).font(theme.selectedTheme.subTextFont)
-                        .foregroundStyle(theme.selectedTheme.secondoryThemeColor)
-                        .font(theme.selectedTheme.subTextFont)
-                    Spacer()
-                    Text(taskModel.getTaskPriorityString())
-                        .font(theme.selectedTheme.secondaryTextTitleFont)
-                       Image(systemName: "flag.fill")
-                        .foregroundStyle(self.getPriorityColor(priority: taskModel.taskPriority))
+        VStack(alignment: .leading) {
+            Text(taskModel.taskTitle)
+                .primaryTextHeading(theme: theme)
+                .accessible(.text)
+            Text(taskModel.taskDescription)
+                .secondaryTextHeading(theme: theme)
+                .padding(.bottom, 10)
+                .accessible(.text)
+            HStack {
+                Text(self.dayDifference(from: taskModel.taskCreationDate)).secondaryTextHeading(theme: theme)
+                    .accessible(.text)
+                Spacer()
+                PriorityView
+            }
 
-                }
-            }.padding(.all, 10)
-        } .frame(height: 120)    .clipShape(RoundedRectangle(cornerRadius: 10))
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.white)
-                    .shadow(radius: 1)
-            )
-            .padding(.all)
+        }
+
+    }
+
+    private var PriorityView: some View {
+        HStack {
+            Text(taskModel.getTaskPriorityString())
+                .font(theme.selectedTheme.secondaryTextTitleFont)
+                .accessible(.text)
+            Image(systemName: "flag.fill")
+                .foregroundStyle(self.getPriorityColor(priority: taskModel.taskPriority))
+                .accessible(.image)
+        }
     }
 
     private func dayDifference(from date: Date) -> String {
@@ -63,6 +63,6 @@ struct TaskListItem: View {
     }
 }
 
- #Preview {
-     TaskListItem(taskModel: (TaskModel(taskId: UUID(), taskCreationDate: Date.now.addingTimeInterval(1740860831), taskDescription: "Start with the progress view logic and aim to finish it by tomorrow", taskPriority: .Low, taskTitle: "Refactor Checkout Module", isCompleted: false))).environmentObject(ThemeManager())
- }
+// #Preview {
+//     TaskListItem(taskModel: (.constant(TaskModel(taskId: UUID(), taskCreationDate: Date.now.addingTimeInterval(1740860831), taskDescription: "Start with the progress view logic and aim to finish it by tomorrow", taskPriority: .Low, taskTitle: "Refactor Checkout Module", taskProgress: 10, isCompleted: false))).environmentObject(ThemeManager())
+// }
