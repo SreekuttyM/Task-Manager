@@ -8,11 +8,12 @@
 import Foundation
 
 struct TaskModel: Hashable {
-
-    let taskCreationDate: Date
-    let taskDescription: String
-    let taskPriority: TaskPriority
-    let taskTitle: String
+    var taskId: UUID
+    var taskCreationDate: Date
+    var taskDescription: String
+    var taskPriority: TaskPriority
+    var taskTitle: String
+    var isCompleted: Bool
 
     func getTaskPriorityString() -> String {
         switch self.taskPriority {
