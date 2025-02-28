@@ -2,7 +2,7 @@
 //  TaskItem+CoreDataProperties.swift
 //  TaskManagerApp
 //
-//  Created by Sreekutty Maya on 27/02/2025.
+//  Created by Sreekutty Maya on 28/02/2025.
 //
 //
 
@@ -19,6 +19,8 @@ extension TaskItem {
     @NSManaged public var taskDescription: String
     @NSManaged public var taskPriority: Int32
     @NSManaged public var taskTitle: String
+    @NSManaged public var isComplete: Bool
+    @NSManaged public var taskId: UUID
 
 }
 
