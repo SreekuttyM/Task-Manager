@@ -14,14 +14,14 @@ struct TaskListItem: View {
         VStack(alignment: .leading) {
             Text(taskModel.taskTitle)
                 .primaryTextHeading(theme: theme)
-                .accessible(.text)
+                .accessible(.text(label: taskModel.taskTitle))
             Text(taskModel.taskDescription)
                 .secondaryTextHeading(theme: theme)
                 .padding(.bottom, 10)
-                .accessible(.text)
+                .accessible(.text(label: taskModel.taskDescription))
             HStack {
                 Text(self.dayDifference(from: taskModel.taskCreationDate)).secondaryTextHeading(theme: theme)
-                    .accessible(.text)
+                    .accessible(.text(label: "Date"))
                 Spacer()
                 PriorityView
             }
@@ -34,7 +34,7 @@ struct TaskListItem: View {
         HStack {
             Text(taskModel.getTaskPriorityString())
                 .font(theme.selectedTheme.secondaryTextTitleFont)
-                .accessible(.text)
+                .accessible(.text(label: taskModel.getTaskPriorityString()))
             Image(systemName: "flag.fill")
                 .foregroundStyle(self.getPriorityColor(priority: taskModel.taskPriority))
                 .accessible(.image)

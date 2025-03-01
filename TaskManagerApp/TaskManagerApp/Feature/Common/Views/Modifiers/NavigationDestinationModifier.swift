@@ -10,17 +10,23 @@ import SwiftUI
 
 struct NavigationDestinationModifier: ViewModifier {
     @ObservedObject var router: NavigationRouter
+    private let coreDataManager: CoreDataManager!
+
+    init(router: NavigationRouter, coreDataManager: CoreDataManager!) {
+        self.router = router
+        self.coreDataManager = coreDataManager
+    }
 
     func body(content: Content) -> some View {
         content
             .navigationDestination(for: NavigationRoute.self) { route in
                 switch route {
                     case .addTask(let action):
-                        AddTaskView(action: action, router: router)
+                        AddTaskView(router: router, action: action, taskManager: TaskManager(coreDataManager: coreDataManager), taskModel: nil)
                             .toolbar(.hidden, for: .tabBar)
 
-                    case .editAtsk(let action, let taskModel):
-                        AddTaskView(action: action, task: taskModel, router: router)
+                    case .editTask(let action, let taskModel):
+                        AddTaskView(router: router, action: action, taskManager: TaskManager(coreDataManager: coreDataManager), taskModel: taskModel)
                             .toolbar(.hidden, for: .tabBar)
 
                 }

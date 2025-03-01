@@ -9,6 +9,36 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>TaskManagerAppTests.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>TaskManagerAppUITests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<true/>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>4D8CCDA02D6E071800A9A945</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4D8CCDB02D6E071C00A9A945</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4D8CCDBA2D6E071C00A9A945</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 	</dict>
 </dict>
 </plist>

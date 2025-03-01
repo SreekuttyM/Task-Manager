@@ -1,0 +1,15 @@
+{
+  "originHash" : "347573bdac0a8c9c35399b1dcb1e0bccf493d182d4c724b31b9cb39b52b8e723",
+  "pins" : [
+    {
+      "identity" : "ios-snapshot-test-case",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/uber/ios-snapshot-test-case.git",
+      "state" : {
+        "revision" : "7b10770333a961be6e5a41c9ce04b8c6d3990126",
+        "version" : "8.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}

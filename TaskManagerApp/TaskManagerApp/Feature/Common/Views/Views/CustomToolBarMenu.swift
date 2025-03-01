@@ -17,13 +17,13 @@ struct CustomToolBarMenu: View {
                 isPresented = true
                 searchOption(.Sort)
             })
-            .accessible(.button)
+            .accessible(.sortSheetOpen)
 
             Button("Filter", action: {
                 isPresented = true
                 searchOption(.Filter)
             })
-            .accessible(.button)
+            .accessible(.filterSheetOpen)
 
         }) {
             Image(systemName: "line.3.horizontal.decrease.circle.fill")

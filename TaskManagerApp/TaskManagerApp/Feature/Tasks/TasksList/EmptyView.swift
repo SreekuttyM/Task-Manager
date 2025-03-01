@@ -24,10 +24,10 @@ struct EmptyView: View {
             Text("You have no lists 🥲")
                 .primaryTextHeading(theme: theme)
                 .padding(.bottom, 2)
-                .accessible(.text)
+                .accessible(.text(label: "You have no lists 🥲"))
             Text("Press the + button to create one")
                 .secondaryTextHeading(theme: theme)
-                .accessible(.text)
+                .accessible(.text(label: "Press the + button to create one"))
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

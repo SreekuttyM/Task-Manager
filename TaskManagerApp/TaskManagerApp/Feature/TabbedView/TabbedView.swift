@@ -9,19 +9,23 @@ import SwiftUI
 
 struct TabbedView: View {
     @EnvironmentObject var theme: ThemeManager
+    var coreDataManager: CoreDataManager
 
     var body: some View {
         TabView {
-            HomeScreen()
+            HomeScreen(coreDataManager: coreDataManager)
                 .tabItem {
                     Label("Tasks",
                           systemImage: "square.and.pencil.circle.fill")
+                    .accessibilityIdentifier("homeTab")
+
                 }
                 .tag(1)
 
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")
+                        .accessibilityIdentifier("settingsTab")
 
                 }
                 .tag(2)
@@ -35,5 +39,5 @@ struct TabbedView: View {
 }
 
 #Preview {
-    TabbedView().environmentObject(ThemeManager())
+    TabbedView(coreDataManager: CoreDataManager()).environmentObject(ThemeManager())
 }

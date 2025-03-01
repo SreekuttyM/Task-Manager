@@ -9,8 +9,14 @@ import SwiftUI
 
 struct HomeScreen: View {
     @EnvironmentObject var theme: ThemeManager
-    @StateObject var viewModel: TaskListViewModel =  TaskListViewModel()
+    @StateObject var viewModel: TaskListViewModel
     @StateObject private var router = NavigationRouter()
+    @ObservedObject var coreDataManager: CoreDataManager
+
+    init(coreDataManager: CoreDataManager) {
+        _viewModel = StateObject(wrappedValue: TaskListViewModel(taskManager: TaskManager(coreDataManager: coreDataManager)))
+        self.coreDataManager = coreDataManager
+    }
 
     var body: some View {
         NavigationStack(path: $router.path) {
@@ -30,9 +36,9 @@ struct HomeScreen: View {
             }.onAppear {
                 viewModel.fetchTasks()
             }
-
+            .accessibilityIdentifier("homeScreen")
             .modifier(
-                NavigationDestinationModifier(router: router)
+                NavigationDestinationModifier(router: router, coreDataManager: coreDataManager)
             )
             .safeAreaInset(edge: .bottom, alignment: .trailing) {
                 PlusButton.padding(.all, 20)
@@ -41,7 +47,7 @@ struct HomeScreen: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         CustomToolBarMenu(isPresented: $viewModel.isPresented) { searchOption in
                             viewModel.selectedSearchOption = searchOption
-                        }
+                        }.accessible(.toolBarMenu)
                     }
                     ToolbarItem(placement: .principal) {
                         Text(TStrings.NTTaskList)
@@ -65,21 +71,22 @@ struct HomeScreen: View {
         } label: {
             PulseEffectCircle(isOn: $viewModel.isAnimated)
         }
+        .accessible(.pulseButton)
     }
 
     private var ErrorView: some View {
         VStack {
             Text("Something Went Wrong")
                 .foregroundColor(.red)
-                .accessible(.text)
+                .accessible(.text(label: "Something Went Wrong"))
             Button("Retry") {
                 viewModel.fetchTasks()
             }
-            .accessible(.button)
+            .accessible(.button())
         }
     }
 }
 
 #Preview {
-    HomeScreen( ).environmentObject(ThemeManager())
+    HomeScreen(coreDataManager: CoreDataManager()).environmentObject(ThemeManager())
 }

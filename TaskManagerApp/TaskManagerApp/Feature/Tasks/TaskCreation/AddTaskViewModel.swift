@@ -22,7 +22,7 @@ enum TaskPriority: Int, CaseIterable {
 
 class AddTaskViewModel: ObservableObject {
     var action: ViewAction
-    var taskManager: TaskManager = TaskManager(coreDataManager: CoreDataManager())
+    var taskManager: TaskManager!
     @Published  var taskId: UUID
     @Published  var name: String
     @Published  var description: String
@@ -32,14 +32,14 @@ class AddTaskViewModel: ObservableObject {
     @Published  var isCompleted: Bool
 
     @Published var title: String = ""
-    var taskModel: TaskModel?  // If nil, it's an "Add" operation
+    var taskModel: TaskModel?
 
     private var cancellables = Set<AnyCancellable>()
     var disableForm: Bool {
         name.isEmpty || description.isEmpty
     }
 
-    init(action: ViewAction, taskModel: TaskModel? = nil) {
+    init(action: ViewAction, taskModel: TaskModel? = nil, taskManager: TaskManager) {
         self.taskModel = taskModel
         self.taskId = taskModel?.taskId ?? UUID()
         self.name = taskModel?.taskTitle ?? ""
@@ -48,6 +48,7 @@ class AddTaskViewModel: ObservableObject {
         self.selectedPriority = taskModel?.taskPriority ?? .Low
         self.taskProgress = Double(taskModel?.taskProgress ?? 0)
         self.isCompleted = taskModel?.isCompleted ?? false
+        self.taskManager = taskManager
 
         self.action = action
         switch action {
@@ -66,20 +67,38 @@ class AddTaskViewModel: ObservableObject {
     }
 
     func update() {
-        if action == .EditTask {
-            taskManager.editTask(taskId: taskId, title: name, description: description, date: taskCreatedDate, prority: selectedPriority.rawValue, taskProgress: taskProgress)
-        } else {
-            taskManager.createTaskItem(title: name, description: description, date: taskCreatedDate, prority: selectedPriority.rawValue, taskProgress: taskProgress)
+        Task {
+            do {
+                if action == .EditTask {
+                    try await  taskManager.editTask(taskId: taskId, title: name, description: description, date: taskCreatedDate, prority: selectedPriority.rawValue, taskProgress: taskProgress)
+                } else {
+                    try await  taskManager.createTaskItem(title: name, description: description, date: taskCreatedDate, prority: selectedPriority.rawValue, taskProgress: taskProgress)
+                }
+            } catch {
+               print(error)
+            }
         }
     }
 
     func markTaskToComplete() {
         isCompleted.toggle()
-        taskManager.markAsComplete(taskId: self.taskId, isCompleted: isCompleted, taskProgress: taskProgress)
+        Task {
+            do {
+                try await  taskManager.markAsComplete(taskId: self.taskId, isCompleted: isCompleted, taskProgress: taskProgress)
+            } catch {
+                print("failed")
+            }
+        }
     }
 
     func deleteTaskModel() {
-        taskManager.deleteSingleTask(taskId: self.taskId)
+        Task {
+            do {
+                try await taskManager.deleteSingleTask(taskId: self.taskId)
+            } catch {
+                print("failed")
+            }
+        }
     }
 
     func showFormButtons() -> Bool {

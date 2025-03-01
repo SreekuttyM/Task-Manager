@@ -35,9 +35,9 @@ struct SliderView: View {
         VStack {
             Text(title)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .accessible(.text)
+                .accessible(.text(label: "SliderText"))
             Slider(value: $progress, in: 0...1.0, minimumValueLabel: Text("0"), maximumValueLabel: Text("100%")) {}
-                .accessible(.slider)
+                .accessibilityIdentifier("Slider")
 
         }
     }

@@ -33,7 +33,8 @@ struct SettingsView: View {
         }
         .onAppear {
             viewModel.loadColors()
-        }
+        }.accessibilityIdentifier("SettingsScreen")
+
     }
 
     private var colorGrid: some View {

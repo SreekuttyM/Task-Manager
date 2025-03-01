@@ -10,7 +10,7 @@ import SwiftUI
 
 enum NavigationRoute: Hashable {
     case addTask(action: ViewAction)
-    case editAtsk(action: ViewAction, taskModel: TaskModel?)
+    case editTask(action: ViewAction, viewModel: TaskModel?)
 }
 
 class NavigationRouter: ObservableObject {

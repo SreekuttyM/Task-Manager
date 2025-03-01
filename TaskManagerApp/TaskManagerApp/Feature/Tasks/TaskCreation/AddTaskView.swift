@@ -9,22 +9,18 @@ import SwiftUI
 
 struct AddTaskView: View {
     @EnvironmentObject var theme: ThemeManager
-    @State  var isSubmitted: Bool = false
     @StateObject private var viewModel: AddTaskViewModel
     @ObservedObject var router: NavigationRouter
-    var onSave: ((TaskModel) -> Void)?
-    @State private var animate = false
 
+//    @State private var animate = false
+    @State  var isSubmitted: Bool = false
     @State var deleteAlert: Bool = false
     @State var completeAlert: Bool = false
     @State var saveAlert: Bool = false
 
-    init( action: ViewAction, task: TaskModel? = nil, onSave: ((TaskModel) -> Void)? = nil, router: NavigationRouter) {
-        _viewModel = StateObject(wrappedValue: AddTaskViewModel(action: action, taskModel: task))
-        if let onSave = onSave {
-            self.onSave = onSave
-        }
-        _router =  ObservedObject(wrappedValue: router)
+    init(router: NavigationRouter, action: ViewAction, taskManager: TaskManager, taskModel: TaskModel?) {
+        _viewModel = StateObject(wrappedValue: AddTaskViewModel(action: action, taskModel: taskModel, taskManager: taskManager))
+        _router = ObservedObject(wrappedValue: router)
     }
 
     var body: some View {
@@ -33,15 +29,21 @@ struct AddTaskView: View {
             Form {
                 Section {
                     TextField("Title", text: $viewModel.name)
+                        .accessible(.textField(label: "Title"))
                     TextField("Description", text: $viewModel.description)
+                        .accessible(.textField(label: "Description"))
 
                     Picker("Priority", selection: $viewModel.selectedPriority) {
                         ForEach(TaskPriority.allCases, id: \.self) {
                             Text("\($0)")
+                                .accessible(.text(label: "Priority"))
+
                         }
                     }
                     DatePicker(selection: $viewModel.taskCreatedDate, in: Date.now..., displayedComponents: .date) {
                         Text("Select a date")
+                            .accessible(.text(label: "Select a date"))
+
                     }
                 }
 
@@ -54,6 +56,7 @@ struct AddTaskView: View {
                         }
                     }.frame(maxWidth: .infinity)
                         .disabled(viewModel.disableForm)
+
                     if viewModel.showFormButtons() {
                         HStack(alignment: .center) {
                             Spacer()
@@ -65,17 +68,15 @@ struct AddTaskView: View {
                         }
                     }
                 }
-
-            }
-
-        }
-        .scaleEffect(animate ? 1.0 : 0.9)
-        .opacity(animate ? 1 : 0)
-        .onAppear {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.5)) {
-                animate = true
             }
         }
+//        .scaleEffect(animate ? 1.0 : 0.9)
+//        .opacity(animate ? 1 : 0)
+//        .onAppear {
+//            withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.5)) {
+//                animate = true
+//            }
+//        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if !viewModel.isCompleted {
@@ -90,30 +91,30 @@ struct AddTaskView: View {
         }
         .alert("Are you sure you want to save the task?", isPresented: $saveAlert, actions: {
             Button("No") {
-            }.accessible(.button)
+            }.accessible(.button())
             Button("Yes") {
                 viewModel.update()
                 router.goBack()
-            }.accessible(.button)
+            }.accessible(.button(label: "SaveAlert"))
 
         })
         .alert("Are you sure you want to mark it as complete?", isPresented: $completeAlert, actions: {
             Button("No") {
-            }.accessible(.button)
+            }.accessible(.button())
             Button("Yes") {
                 viewModel.taskProgress = 1.0
                 viewModel.markTaskToComplete()
                 router.goBack()
-            }.accessible(.button)
+            }.accessible(.button(label: "CompleteAlert"))
 
         })
         .alert("Are you sure you want to delete the task?", isPresented: $deleteAlert, actions: {
             Button("No") {
-            }.accessible(.button)
+            }.accessible(.button())
             Button("Yes") {
                 viewModel.deleteTaskModel()
                 router.goBack()
-            }.accessible(.button)
+            }.accessible(.button(label: "DeleteAlert"))
         })
 
     }
@@ -152,5 +153,5 @@ struct AddTaskView: View {
 }
 
  #Preview {
-     AddTaskView(action: .AddTask, router: NavigationRouter())
+     AddTaskView(router: NavigationRouter(), action: .AddTask, taskManager: TaskManager(coreDataManager: CoreDataManager()), taskModel: nil)
  }

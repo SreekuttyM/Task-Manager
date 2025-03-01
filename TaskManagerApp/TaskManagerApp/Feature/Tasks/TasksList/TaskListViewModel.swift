@@ -10,7 +10,7 @@ import Combine
 
 enum ViewState {
     case isLoading
-    case failed
+    case failed(error: Error)
     case finish(taksList: [TaskModel])
 }
 
@@ -29,7 +29,7 @@ public enum SortOption: String, CaseIterable {
     var descriptor: NSSortDescriptor {
         switch self {
             case .Priority:
-                return NSSortDescriptor(key: "taskPriority", ascending: false)
+                return NSSortDescriptor(key: "taskPriority", ascending: true)
             case .Date:
                 return NSSortDescriptor(key: "taskCreationDate", ascending: false)
             case .Alphabetical:
@@ -42,7 +42,7 @@ public enum SortOption: String, CaseIterable {
 public enum FilterOption: String, CaseIterable {
     case All = "All"
     case Pending = "Pending"
-    case Completed = "Competed"
+    case Completed = "Completed"
     var predicate: NSPredicate? {
         switch self {
             case .All:
@@ -64,10 +64,10 @@ class TaskListViewModel: ObservableObject {
     @Published var array_tasks: [TaskModel] = []
     @Published var isSearchOptionEnabled: (sort: SortOption?, filterOption: FilterOption?)?
 
-    var taskManager: TaskManager = TaskManager(coreDataManager: CoreDataManager())
+    var taskManager: TaskManager!
     private var cancellables = Set<AnyCancellable>()
 
-    init() {
+    init(taskManager: TaskManager = TaskManager(coreDataManager: CoreDataManager())) {
         $isSearchOptionEnabled
             .dropFirst()
             .receive(on: RunLoop.main)
@@ -77,6 +77,7 @@ class TaskListViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+        self.taskManager = taskManager
     }
 
     func fetchTasks(filter: FilterOption? = nil, sort: SortOption? = nil) {
@@ -88,33 +89,56 @@ class TaskListViewModel: ObservableObject {
                     viewState = .finish(taksList: fetchTasks)
                 }
             } catch {
-                viewState = .failed
-                print(error)
+                await MainActor.run {
+                    viewState = .failed(error: error)
+                    print(error)
+                }
             }
         }
     }
 
     func deleteTaskModel(selectedTask: TaskModel) {
         viewState = .isLoading
-        taskManager.deleteSingleTask(taskId: selectedTask.taskId)
-        array_tasks.removeAll { $0 == selectedTask }
-        viewState = .finish(taksList: array_tasks)
+        Task {
+            do {
+                try await  taskManager.deleteSingleTask(taskId: selectedTask.taskId)
+                await MainActor.run {
+                    array_tasks.removeAll { $0 == selectedTask }
+                    viewState = .finish(taksList: array_tasks)
+                }
+            } catch {
+                await MainActor.run {
+                    viewState = .failed(error: error)
+                    print("failed")
+                }
+            }
+        }
     }
 
     func markTaskToComplete(selectedTask: TaskModel) {
         viewState = .isLoading
-        taskManager.markAsComplete(taskId: selectedTask.taskId, isCompleted: true, taskProgress: 1.0)
-        let task = array_tasks.filter { $0 == selectedTask }.first
-        if var task = task {
-            task.isCompleted = true
-            task.taskProgress = 1.0
-            if let index = array_tasks.firstIndex(of: task) {
-                array_tasks.remove(at: index)
-                array_tasks.insert(task, at: index)
+        Task {
+            do {
+                try await taskManager.markAsComplete(taskId: selectedTask.taskId, isCompleted: true, taskProgress: 1.0)
+                await MainActor.run {
+                    let task = array_tasks.filter { $0 == selectedTask }.first
+                    if var task = task {
+                        task.isCompleted = true
+                        task.taskProgress = 1.0
+                        if let index = array_tasks.firstIndex(of: task) {
+                            array_tasks.remove(at: index)
+                            array_tasks.insert(task, at: index)
+                        }
+                    }
+                    viewState = .finish(taksList: array_tasks)
+                }
+            } catch {
+                await MainActor.run {
+                    viewState = .failed(error: error)
+                    print("failed")
+                }
             }
         }
-        viewState = .finish(taksList: array_tasks)
-
     }
 
 }

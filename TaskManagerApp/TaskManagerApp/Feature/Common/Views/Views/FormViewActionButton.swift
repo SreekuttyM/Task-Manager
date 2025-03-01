@@ -13,7 +13,7 @@ struct FormViewActionButton: View {
     var body: some View {
         Button(title, action: action)
             .buttonStyle(.bordered)
-            .accessible(.button)
+            .accessible(.button(label: title))
 
     }
 }

@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreData
-@testable import TaskManagerApp
 
 class CoreDataTestManager: CoreDataManager {
     override init() {
@@ -31,4 +30,12 @@ class CoreDataTestManager: CoreDataManager {
         }
         persistentContainer = container
     }
+    
+    override func seedTestData() {
+           super.seedTestData()
+       }
+
+       override func clearData() {
+           super.clearData()
+       }
 }

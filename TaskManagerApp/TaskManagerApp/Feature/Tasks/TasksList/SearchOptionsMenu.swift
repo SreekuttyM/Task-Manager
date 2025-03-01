@@ -13,8 +13,6 @@ struct SearchOptionsMenu: View {
     @Binding var isSearchOptionEnabled: (sort: SortOption?, filterOption: FilterOption?)?
     var title: String
     var searchOption: SearchOption
-    var sortlist = ["Priority", "Date", "Alphabetical Order"]
-    var filterList = ["All", "Pending", "Completed"]
 
     var body: some View {
         VStack {
@@ -35,27 +33,15 @@ struct SearchOptionsMenu: View {
                 .headerTextHeading(theme: theme)
                 .padding(.top, 20)
                 .padding(.bottom, 5)
-                .accessible(.text)
+                .accessible(.text(label: "Search Option"))
             Text("\(title.capitalized) Tasks By")
                 .secondaryTextHeading(theme: theme)
-                .accessible(.text)
+                .accessible(.text(label: "Tasks By"))
 
         }
     }
 
     private var SortOptionList: some View {
-        VStack(alignment: .center, spacing: 0) {
-            ForEach(FilterOption.allCases, id: \.self) { filterOption in
-                FormViewActionButton(action: {
-                    isSearchOptionEnabled = (sort: nil, filterOption: filterOption)
-                    dismiss()
-                }, title: filterOption.rawValue
-                ).padding()
-            }
-        }
-    }
-
-    private var FilterOptionList: some View {
         VStack(alignment: .center, spacing: 0) {
             ForEach(SortOption.allCases, id: \.self) { filterOption in
                 FormViewActionButton(action: {
@@ -65,6 +51,19 @@ struct SearchOptionsMenu: View {
                 ).padding()
             }
         }
+    }
+
+    private var FilterOptionList: some View {
+        VStack(alignment: .center, spacing: 0) {
+            ForEach(FilterOption.allCases, id: \.self) { filterOption in
+                FormViewActionButton(action: {
+                    isSearchOptionEnabled = (sort: nil, filterOption: filterOption)
+                    dismiss()
+                }, title: filterOption.rawValue
+                ).padding()
+            }
+        }
+
     }
 }
 

@@ -33,13 +33,12 @@ class TaskManager {
             return taskModels
 
         } catch {
-            print("Failed to fetch data: \(error)")
-        }
+            throw error
 
-        return []
+        }
     }
 
-    func createTaskItem(taskId: UUID = UUID(), title: String, description: String, date: Date, prority: Int, isComplete: Bool = false, taskProgress: Double) {
+    func createTaskItem(taskId: UUID = UUID(), title: String, description: String, date: Date, prority: Int, isComplete: Bool = false, taskProgress: Double) async throws {
         let taskItem = TaskItem(context: coreDataManager.context)
         taskItem.taskId = taskId
         taskItem.taskTitle = title
@@ -50,16 +49,16 @@ class TaskManager {
         taskItem.isComplete = isComplete
         if coreDataManager.context.hasChanges {
             do {
-                try coreDataManager.context.save()
+                try self.coreDataManager.context.save()
                 print("Saved")
             } catch {
                 let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                throw nserror
             }
         }
     }
 
-    func editTask(taskId: UUID, title: String, description: String, date: Date, prority: Int, isComplete: Bool = false, taskProgress: Double) {
+    func editTask(taskId: UUID, title: String, description: String, date: Date, prority: Int, isComplete: Bool = false, taskProgress: Double) async throws {
         let request = TaskItem.createFetchRequest()
         request.predicate = NSPredicate(format: "taskId == %@", taskId as CVarArg)
         if let taskItem = try? coreDataManager.context.fetch(request).first {
@@ -72,16 +71,18 @@ class TaskManager {
         }
         if coreDataManager.context.hasChanges {
             do {
-                try coreDataManager.context.save()
-                print("Updated")
+                try await coreDataManager.context.perform {
+                    try self.coreDataManager.context.save()
+                    print("Updated")
+                }
             } catch {
                 let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                throw nserror
             }
         }
     }
 
-    func markAsComplete(taskId: UUID, isCompleted: Bool, taskProgress: Double) {
+    func markAsComplete(taskId: UUID, isCompleted: Bool, taskProgress: Double) async throws {
         let request = TaskItem.createFetchRequest()
         request.predicate = NSPredicate(format: "taskId == %@", taskId as CVarArg)
         if let fetchedTask = try? coreDataManager.context.fetch(request).first {
@@ -91,16 +92,19 @@ class TaskManager {
         }
         if coreDataManager.context.hasChanges {
             do {
-                try coreDataManager.context.save()
-                print("Updated")
+                try await coreDataManager.context.perform {
+                    try self.coreDataManager.context.save()
+                    print("Updated")
+                }
+
             } catch {
                 let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                throw nserror
             }
         }
     }
 
-    func deleteSingleTask(taskId: UUID) {
+    func deleteSingleTask(taskId: UUID) async throws {
         let request = TaskItem.createFetchRequest()
         request.predicate = NSPredicate(format: "taskId == %@", taskId as CVarArg)
         if let fetchedTask = try? coreDataManager.context.fetch(request).first {
@@ -108,11 +112,13 @@ class TaskManager {
         }
         if coreDataManager.context.hasChanges {
             do {
-                try coreDataManager.context.save()
-                print("deleted")
+                try await coreDataManager.context.perform {
+                    try self.coreDataManager.context.save()
+                    print("deleted")
+                }
             } catch {
                 let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                throw nserror
             }
         }
     }

@@ -19,7 +19,7 @@ struct TaskListView: View {
             ForEach(viewModel.array_tasks, id: \.self) { task in
 
                 TaskListItem(taskModel: task)
-
+                    .accessibilityIdentifier("listItem_\(task.taskId)")
                     .swipeActions {
                         Button(role: .destructive) {
                             selectedTask = task
@@ -27,39 +27,41 @@ struct TaskListView: View {
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
-                        .accessible(.button)
+                        .accessible(.button())
                         Button {
                             selectedTask = task
                             completeAlert = true
                         } label: {
                             Label("Mark As Complete", systemImage: "checkmark")
                         }
-                        .accessible(.button)
+                        .accessible(.button())
 
                     }
                     .onTapGesture {
-                        router.navigate(to: .editAtsk(action: .EditTask, taskModel: task))
+                        router.navigate(to: .editTask(action: .EditTask, viewModel: task))
                     }
             } .onMove(perform: moveItem)
 
-        }.listStyle(.insetGrouped)
+        }.accessibilityIdentifier("taskList")
+
+            .listStyle(.insetGrouped)
             .alert("Are you sure you want to delete the task?", isPresented: $deleteAlert, actions: {
                         Button("Cancel", role: .cancel) { }
-                       .accessible(.button)
+                       .accessible(.button())
                         Button("Delete", role: .destructive) {
                             if let task = selectedTask {
                                 deleteTask(task: task)
                             }
-                        }.accessible(.button)
+                        }.accessible(.button())
                     })
             .alert("Are you sure you want to mark it as complete?", isPresented: $completeAlert, actions: {
                         Button("Cancel", role: .cancel) { }
-                       .accessible(.button)
+                       .accessible(.button())
                         Button("Mark As Complete", role: .destructive) {
                             if let task = selectedTask {
                                 markComplete(task: task)
                             }
-                        }.accessible(.button)
+                        }.accessible(.button())
                     })
 
     }
