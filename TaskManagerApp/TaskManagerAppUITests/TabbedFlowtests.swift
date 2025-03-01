@@ -27,14 +27,15 @@ final class TabbedFlowtests: XCTestCase {
     func testTabBarNavigation() {
             let homeTab = app.buttons["homeTab"]
             let settingsTab = app.buttons["settingsTab"]
-
-            XCTAssertTrue(app.staticTexts["homeScreen"].exists, "Home Screen should be visible")
+            let navBar = app.navigationBars.staticTexts["TASKIFY"]
+  
+            XCTAssertTrue(navBar.exists, "Home Screen should be visible")
 
         settingsTab.tap()
             XCTAssertTrue(app.staticTexts["SettingsScreen"].exists, "Settings Screen should be visible")
 
             homeTab.tap()
-            XCTAssertTrue(app.staticTexts["homeScreen"].exists, "Home Screen should be visible again")
+            XCTAssertTrue(navBar.exists, "Home Screen should be visible again")
         }
 
    

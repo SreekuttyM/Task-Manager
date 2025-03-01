@@ -33,10 +33,11 @@ struct HomeScreen: View {
                             TaskListView(viewModel: viewModel, router: router)
                         }
                 }
-            }.onAppear {
+            }.accessibilityIdentifier("homeScreen")
+            .onAppear {
                 viewModel.fetchTasks()
             }
-            .accessibilityIdentifier("homeScreen")
+           
             .modifier(
                 NavigationDestinationModifier(router: router, coreDataManager: coreDataManager)
             )
