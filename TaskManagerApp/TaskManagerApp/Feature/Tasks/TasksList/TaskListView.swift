@@ -70,7 +70,7 @@ struct TaskListView: View {
 
     func moveItem(from source: IndexSet, to destination: Int) {
         viewModel.array_tasks.move(fromOffsets: source, toOffset: destination)
-        triggerHaptic(style: .light)
+        triggerHaptic(style: .medium)
        }
 
     func deleteTask(task: TaskModel) {

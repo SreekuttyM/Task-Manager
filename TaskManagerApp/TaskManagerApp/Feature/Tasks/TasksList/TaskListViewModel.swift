@@ -29,7 +29,7 @@ public enum SortOption: String, CaseIterable {
     var descriptor: NSSortDescriptor {
         switch self {
             case .Priority:
-                return NSSortDescriptor(key: "taskPriority", ascending: true)
+                return NSSortDescriptor(key: "taskPriority", ascending: false)
             case .Date:
                 return NSSortDescriptor(key: "taskCreationDate", ascending: false)
             case .Alphabetical:
@@ -125,9 +125,10 @@ class TaskListViewModel: ObservableObject {
                     if var task = task {
                         task.isCompleted = true
                         task.taskProgress = 1.0
-                        if let index = array_tasks.firstIndex(of: task) {
-                            array_tasks.remove(at: index)
-                            array_tasks.insert(task, at: index)
+                        if let row = array_tasks.firstIndex(where: {$0.taskId == task.taskId}) {
+                            array_tasks.remove(at: row)
+                            array_tasks.insert(task, at: row
+                            )
                         }
                     }
                     viewState = .finish(taksList: array_tasks)

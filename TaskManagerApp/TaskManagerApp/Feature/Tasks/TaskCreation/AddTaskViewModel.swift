@@ -14,9 +14,9 @@ enum ViewAction: String {
 }
 
 enum TaskPriority: Int, CaseIterable {
-    case High
-    case Low
-    case Medium
+    case High = 3
+    case Low = 1
+    case Medium = 2
 
 }
 
