@@ -28,6 +28,8 @@ struct NavigationDestinationModifier: ViewModifier {
                     case .editTask(let action, let taskModel):
                         AddTaskView(router: router, action: action, taskManager: TaskManager(coreDataManager: coreDataManager), taskModel: taskModel)
                             .toolbar(.hidden, for: .tabBar)
+                            .transition(.move(edge: .bottom))
+                           
 
                 }
             }

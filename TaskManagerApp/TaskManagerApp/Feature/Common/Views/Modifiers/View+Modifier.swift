@@ -23,21 +23,21 @@ extension View {
     func headerTextHeading(theme: ThemeManager) -> some View {
         self
             .font(theme.selectedTheme.largeTitleFont)
-            .foregroundColor(theme.selectedTheme.secondoryThemeColor)
+            .foregroundColor(theme.selectedTheme.accentColor)
 
     }
 
     func primaryTextHeading(theme: ThemeManager) -> some View {
         self
-            .font(theme.selectedTheme.secondaryTextTitleFont)
-            .foregroundColor(theme.selectedTheme.secondoryThemeColor)
+            .font(theme.selectedTheme.textTitleFont)
+            .foregroundColor(theme.selectedTheme.accentColor)
 
     }
 
     func secondaryTextHeading(theme: ThemeManager) -> some View {
         self
-            .font(theme.selectedTheme.subTextFont)
-            .foregroundColor(theme.selectedTheme.secondoryThemeColor)
+            .font(theme.selectedTheme.secondaryTextTitleFont)
+            .foregroundColor(theme.selectedTheme.accentColor)
 
     }
 

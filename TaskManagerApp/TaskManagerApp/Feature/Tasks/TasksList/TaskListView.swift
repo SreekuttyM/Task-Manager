@@ -17,9 +17,14 @@ struct TaskListView: View {
     var body: some View {
         List {
             ForEach(viewModel.array_tasks, id: \.self) { task in
-
-                TaskListItem(taskModel: task)
+                VStack(alignment: .leading) {
+                    TaskListItem( taskModel: task)
+                    Button("") {
+                        router.navigate(to: .editTask(action: .EditTask, viewModel: task))
+                    }
+                }
                     .accessibilityIdentifier("listItem_\(task.taskId)")
+                    
                     .swipeActions {
                         Button(role: .destructive) {
                             selectedTask = task
@@ -37,13 +42,10 @@ struct TaskListView: View {
                         .accessible(.button())
 
                     }
-                    .onTapGesture {
-                        router.navigate(to: .editTask(action: .EditTask, viewModel: task))
-                    }
+                    
             } .onMove(perform: moveItem)
 
         }.accessibilityIdentifier("taskList")
-
             .listStyle(.insetGrouped)
             .alert("Are you sure you want to delete the task?", isPresented: $deleteAlert, actions: {
                         Button("Cancel", role: .cancel) { }

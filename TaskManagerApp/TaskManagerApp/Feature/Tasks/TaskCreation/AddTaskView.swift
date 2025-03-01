@@ -12,11 +12,11 @@ struct AddTaskView: View {
     @StateObject private var viewModel: AddTaskViewModel
     @ObservedObject var router: NavigationRouter
 
-//    @State private var animate = false
+    @State private var animate = false
     @State  var isSubmitted: Bool = false
     @State var deleteAlert: Bool = false
     @State var completeAlert: Bool = false
-    @State var saveAlert: Bool = false
+//    @State var saveAlert: Bool = false
 
     init(router: NavigationRouter, action: ViewAction, taskManager: TaskManager, taskModel: TaskModel?) {
         _viewModel = StateObject(wrappedValue: AddTaskViewModel(action: action, taskModel: taskModel, taskManager: taskManager))
@@ -45,6 +45,7 @@ struct AddTaskView: View {
                             .accessible(.text(label: "Select a date"))
 
                     }
+
                 }
 
                 Section {
@@ -70,13 +71,13 @@ struct AddTaskView: View {
                 }
             }
         }
-//        .scaleEffect(animate ? 1.0 : 0.9)
-//        .opacity(animate ? 1 : 0)
-//        .onAppear {
-//            withAnimation(.spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.5)) {
-//                animate = true
-//            }
-//        }
+        .scaleEffect(animate ? 1.0 : 0.9)
+        .opacity(animate ? 1 : 0)
+        .onAppear {
+            withAnimation(.spring()) {
+                animate = true
+                           }
+        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if !viewModel.isCompleted {
@@ -84,21 +85,13 @@ struct AddTaskView: View {
                 }
             }
             ToolbarItem(placement: .principal) {
-                Text(viewModel.title)
-                    .headerTextHeading(theme: theme)
-                    .padding(.top, 10)
+                    Text(viewModel.title)
+                        .headerTextHeading(theme: theme)
+                        .padding(.top, 10)
+                
             }
         }
-        .alert("Are you sure you want to save the task?", isPresented: $saveAlert, actions: {
-            Button("No") {
-            }.accessible(.button())
-            Button("Yes") {
-                viewModel.update()
-                router.goBack()
-            }.accessible(.button(label: "SaveAlert"))
-
-        })
-        .alert("Are you sure you want to mark it as complete?", isPresented: $completeAlert, actions: {
+        .alert("Are you sure you want to mark it as complete? This will set the progress to 100%", isPresented: $completeAlert, actions: {
             Button("No") {
             }.accessible(.button())
             Button("Yes") {
@@ -122,7 +115,8 @@ struct AddTaskView: View {
     private var SaveButton: some View {
         FormViewActionButton(action: {
             if !viewModel.disableForm {
-                saveAlert = true
+                viewModel.update()
+                router.goBack()
             }
 
         }, title: "Save")

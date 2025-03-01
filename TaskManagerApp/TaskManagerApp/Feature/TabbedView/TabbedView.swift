@@ -31,7 +31,6 @@ struct TabbedView: View {
                 .tag(2)
         }.tint(theme.selectedTheme.accentColor)
             .onAppear(perform: {
-                        UITabBar.appearance().unselectedItemTintColor = .systemBrown
                         UITabBar.appearance().backgroundColor = .systemGray4.withAlphaComponent(0.4)
                     })
     }

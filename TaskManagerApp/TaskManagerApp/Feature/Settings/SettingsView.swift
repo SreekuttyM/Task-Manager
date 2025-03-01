@@ -19,7 +19,7 @@ struct SettingsView: View {
                 Text("Change Theme")
                     .font(theme.selectedTheme.largeTitleFont)
                     .frame(height: 70, alignment: .leading)
-                    .foregroundStyle(theme.selectedTheme.secondoryThemeColor)
+                    .foregroundStyle(theme.selectedTheme.defaultColor)
                     .padding(.top, 40)
                 colorGrid
                     .padding(.all, 20)
@@ -27,7 +27,8 @@ struct SettingsView: View {
                 if let text = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
                     Text("version\(text)")
                         .font(theme.selectedTheme.subTextFont)
-                        .foregroundStyle(theme.selectedTheme.secondoryThemeColor)
+                        .foregroundStyle(theme.selectedTheme.defaultColor)
+                        .padding(.bottom,20)
                 }
             }
         }

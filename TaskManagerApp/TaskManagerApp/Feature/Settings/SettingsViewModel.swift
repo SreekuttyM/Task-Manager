@@ -30,22 +30,22 @@ class SettingsViewModel: ObservableObject {
                     colors.append(["color": "00F900", "theme": ThemeName.green.rawValue])
 
                 case .cyan:
-                    colors.append(["color": "00FDFF", "theme": ThemeName.cyan.rawValue])
+                    colors.append(["color": "FF6F61", "theme": ThemeName.cyan.rawValue])
 
                 case .mint:
-                    colors.append(["color": "3EB489", "theme": ThemeName.mint.rawValue])
+                    colors.append(["color": "2D8B17", "theme": ThemeName.mint.rawValue])
 
                 case .indigo:
-                    colors.append(["color": "4B0082", "theme": ThemeName.indigo.rawValue])
+                    colors.append(["color": "000000", "theme": ThemeName.indigo.rawValue])
 
                 case .teal:
-                    colors.append(["color": "008080", "theme": ThemeName.teal.rawValue])
+                    colors.append(["color": "A57C61", "theme": ThemeName.teal.rawValue])
 
                 case .purple:
-                    colors.append(["color": "942192", "theme": ThemeName.purple.rawValue])
+                    colors.append(["color": "6A4C9C", "theme": ThemeName.purple.rawValue])
 
                 case .orange:
-                    colors.append(["color": "FF9300", "theme": ThemeName.orange.rawValue])
+                    colors.append(["color": "E9A722", "theme": ThemeName.orange.rawValue])
 
             }
         }

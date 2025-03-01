@@ -16,6 +16,8 @@ protocol ThemeProtocol {
     var accentColor: Color { get }
     var primaryThemeColor: Color { get }
     var secondoryThemeColor: Color { get }
+    var defaultColor: Color { get }
+
 }
 
 class ThemeManager: ObservableObject {

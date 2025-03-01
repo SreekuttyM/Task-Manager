@@ -9,9 +9,9 @@ import SwiftUI
 
 struct TaskListItem: View {
     @EnvironmentObject var theme: ThemeManager
-     var taskModel: TaskModel
+    var taskModel: TaskModel
+    
     var body: some View {
-        VStack(alignment: .leading) {
             Text(taskModel.taskTitle)
                 .primaryTextHeading(theme: theme)
                 .accessible(.text(label: taskModel.taskTitle))
@@ -25,8 +25,8 @@ struct TaskListItem: View {
                 Spacer()
                 PriorityView
             }
-
-        }
+            
+        
 
     }
 
