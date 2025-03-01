@@ -9,25 +9,35 @@ import SwiftUI
 
 struct TabbedView: View {
     @EnvironmentObject var theme: ThemeManager
+    var coreDataManager: CoreDataManager
+
     var body: some View {
         TabView {
-            TaskListView()
+            HomeScreen(coreDataManager: coreDataManager)
                 .tabItem {
                     Label("Tasks",
-                        systemImage: "square.and.pencil.circle.fill")
+                          systemImage: "square.and.pencil.circle.fill")
+                    .accessibilityIdentifier("homeTab")
+
                 }
                 .tag(1)
 
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")
+                        .accessibilityIdentifier("settingsTab")
 
                 }
                 .tag(2)
         }.tint(theme.selectedTheme.accentColor)
+            .onAppear(perform: {
+                        UITabBar.appearance().unselectedItemTintColor = .systemBrown
+                        UITabBar.appearance().backgroundColor = .systemGray4.withAlphaComponent(0.4)
+                    })
     }
+
 }
 
 #Preview {
-    TabbedView()
+    TabbedView(coreDataManager: CoreDataManager()).environmentObject(ThemeManager())
 }

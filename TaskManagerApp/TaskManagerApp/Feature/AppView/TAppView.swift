@@ -9,12 +9,13 @@ import SwiftUI
 
 struct TAppView: View {
     @StateObject var appState: TAppState = TAppState()
+    var coreDataManager = CoreDataManager()
 
     var body: some View {
         AppViewBuilder(
             showHome: appState.showHome,
             homeView: {
-                TabbedView()
+                TabbedView(coreDataManager: coreDataManager)
             }, onBoardingView: {
                 OnboardingView()
             }

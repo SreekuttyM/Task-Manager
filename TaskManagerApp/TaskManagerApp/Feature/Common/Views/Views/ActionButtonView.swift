@@ -24,6 +24,7 @@ struct ActionButtonView: View {
             } label: {
                 Text(title).navigationActionModifier(color: theme.selectedTheme.accentColor)
             }
+            .accessible(.button())
     }
 }
 
