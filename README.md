@@ -3,6 +3,8 @@
 ## Description
     TaskMaster is a simple iOS application designed to help users manage their tasks effectively. This application supports functionalities like add task with progress, delete and complete tasks.
 
+https://github.com/user-attachments/assets/70bc2e01-9737-4e0b-b55c-06c94288f81d
+
 ## Table of Contents
 - Installation
 - Usage
