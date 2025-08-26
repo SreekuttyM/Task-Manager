@@ -23,14 +23,14 @@ jobs:
        # - name: Show available simulators
        #   run: xcrun simctl list devices
          
-       # - name: Build
-       #   working-directory: TaskManagerApp
-       #   run: |
-       #     xcodebuild \
-       #     -scheme TaskManagerApp \
-       #     -sdk iphonesimulator \
-       #     -destination 'id=C707DF3C-D29E-4CA9-B02F-06CBF9E434B2' \
-       #     build
+       - name: Build
+         working-directory: TaskManagerApp
+         run: |
+           xcodebuild \
+           -scheme TaskManagerApp \
+           -sdk iphonesimulator \
+           -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=17.4' \
+            build
 
        
        - name: Run tests
