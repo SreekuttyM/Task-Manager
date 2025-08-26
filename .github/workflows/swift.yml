@@ -22,11 +22,12 @@ jobs:
        - name: Build
          working-directory: TaskManagerApp
          run: |
-              xcodebuild \
-              -scheme TaskManagerApp \
-              -sdk iphonesimulator \
-              -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=17.5' \
-              build
+           xcodebuild \
+           -scheme TaskManagerApp \
+           -sdk iphonesimulator \
+           -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' \
+           build
+
        
        - name: Run tests
          working-directory: TaskManagerApp
