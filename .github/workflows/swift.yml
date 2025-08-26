@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-      runs-on:  macos-15 # ensures macOS 15 + Xcode 16
+      runs-on:  macos-15.6 # ensures macOS 15 + Xcode 16
       steps:
       - uses: actions/checkout@v4
       
