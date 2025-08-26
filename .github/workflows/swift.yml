@@ -20,7 +20,9 @@ jobs:
          run: sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
 
        - name: Build
+         working-directory: TaskManagerApp
          run: xcodebuild -project TaskManagerApp.xcodeproj -scheme TaskManagerApp -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14' build
 
        - name: Run tests
+         working-directory: TaskManagerApp
          run: xcodebuild test -project TaskManagerApp.xcodeproj -scheme TaskManagerApp -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14'
