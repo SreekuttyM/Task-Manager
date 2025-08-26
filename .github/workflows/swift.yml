@@ -20,8 +20,8 @@ jobs:
        - name: Select Xcode
          run: sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
          
-       - name: Show available simulators
-         run: xcrun simctl list devices
+       # - name: Show available simulators
+       #   run: xcrun simctl list devices
          
        - name: Build
          working-directory: TaskManagerApp
@@ -29,7 +29,7 @@ jobs:
            xcodebuild \
            -scheme TaskManagerApp \
            -sdk iphonesimulator \
-           -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.4' \
+           -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.4.0'
            build
 
        
