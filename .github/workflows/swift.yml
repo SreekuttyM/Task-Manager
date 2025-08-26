@@ -28,3 +28,8 @@ jobs:
         working-directory: TaskManagerApp
         run: |
           xcodebuild -scheme TaskManagerApp -sdk iphonesimulator build
+
+      - name: Run tests
+        working-directory: TaskManagerApp
+        run: |
+          xcodebuild -scheme TaskManagerApp -sdk iphonesimulator build
