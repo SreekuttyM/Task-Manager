@@ -27,7 +27,11 @@ jobs:
       - name: Build
         working-directory: TaskManagerApp
         run: |
-          xcodebuild -scheme TaskManagerApp -sdk iphonesimulator build
+         xcodebuild \
+          -scheme TaskManagerApp \
+          -sdk iphonesimulator \
+          build \
+          CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
 
       - name: Run tests
         working-directory: TaskManagerApp
