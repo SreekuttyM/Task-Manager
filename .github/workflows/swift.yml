@@ -15,8 +15,12 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v
+       - uses: actions/checkout@v4
+       - name: Select Xcode
+         run: sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+
+       - name: Build
+         run: xcodebuild -scheme TaskManagerApp -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14' build
+
+       - name: Run tests
+         run: xcodebuild test -scheme TaskManagerApp -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14'
