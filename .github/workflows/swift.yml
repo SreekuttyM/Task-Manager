@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-      runs-on: macos-latest  # ensures macOS 15 + Xcode 16
+      runs-on:  macos-15 # ensures macOS 15 + Xcode 16
       steps:
       - uses: actions/checkout@v4
       
@@ -27,11 +27,11 @@ jobs:
       - name: Build
         working-directory: TaskManagerApp
         run: |
-         xcodebuild \
-          -scheme TaskManagerApp \
+         -scheme TaskManagerApp \
           -sdk iphonesimulator \
           build \
-          CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+          CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO \
+          -destination 'generic/platform=iOS Simulator'
 
       - name: Run tests
         working-directory: TaskManagerApp
